@@ -93,7 +93,7 @@ Two temporary HTML files are written to `%TEMP%` on each launch for the dashboar
 
 ## Installation
 
-1. Download the latest `.exe`. from Releases.
+1. Download the latest `.exe`. from [Releases](https://github.com/armaninyow/Dynamic-Window-Manager/releases).
 2. Place it anywhere you like.
 3. Double-click to run.
 
