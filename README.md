@@ -8,14 +8,14 @@ A FancyZones-style window placement tool for Windows. Define rules that automati
 
 ## Features
 
-- **Rule-based placement** — assign a position and size to any application by its `.exe` process name
-- **9-point anchor system** — place windows at any corner, edge midpoint, or center of the screen
-- **Multi-monitor support** — target any monitor by number
-- **Apply once, move freely** — rules fire only on first appearance; you can move the window afterward without interference
-- **Dialog filtering** — only real application windows are touched; file pickers, property sheets, progress dialogs, and system overlays are left alone
-- **Persistent rules** — all rules are saved to a plain `.ini` file and reloaded on startup
-- **Modern HTML table UI** — dark-themed dashboard rendered via an embedded WebBrowser control
-- **Minimize to tray** — closing the dashboard hides it; the watcher keeps running in the background
+- **Rule-based placement**: assign a position and size to any application by its `.exe` process name
+- **9-point anchor system**: place windows at any corner, edge midpoint, or center of the screen
+- **Multi-monitor support**: target any monitor by number
+- **Apply once, move freely**: rules fire only on first appearance; you can move the window afterward without interference
+- **Dialog filtering**: only real application windows are touched; file pickers, property sheets, progress dialogs, and system overlays are left alone
+- **Persistent rules**: all rules are saved to a plain `.ini` file and reloaded on startup
+- **Modern HTML table UI**: dark-themed dashboard rendered via an embedded WebBrowser control
+- **Minimize to tray**: closing the dashboard hides it; the watcher keeps running in the background
 
 ---
 
@@ -58,7 +58,7 @@ The work area is the usable screen area, excluding the taskbar.
 | **Center** | Left edge center | Screen center | Right edge center |
 | **Bottom** | Bottom-left corner | Bottom edge center | Bottom-right corner |
 
-**Database** — rules are stored in `DWM_Rules.ini` next to the executable. Each section is one rule and the file is plain text, so you can hand-edit it if needed.
+**Database**: rules are stored in `DWM_Rules.ini` next to the executable. Each section is one rule and the file is plain text, so you can hand-edit it if needed.
 
 ```ini
 [Rule1]
