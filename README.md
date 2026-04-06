@@ -52,7 +52,7 @@ Click **Add** (or **Save** when editing) to apply immediately.
 
 The work area is the usable screen area, excluding the taskbar.
 
-|  | Left | Center | Right |
+| V/H | Left | Center | Right |
 |---|---|---|---|
 | **Top** | Top-left corner | Top edge center | Top-right corner |
 | **Center** | Left edge center | Screen center | Right edge center |
