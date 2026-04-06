@@ -1,8 +1,8 @@
 # ↔️ Dynamic Window Manager
 
-![Dashboard](https://i.imgur.com/placeholder.png)
+![](https://raw.githubusercontent.com/armaninyow/Dynamic-Window-Manager/refs/heads/main/sample.png)
 
-A FancyZones-style window placement tool for Windows. Define rules that automatically position and resize application windows the moment they open — by process name, anchor position, dimensions, and monitor.
+A FancyZones-style window placement tool for Windows. Define rules that automatically position and resize application windows the moment they open.
 
 ---
 
@@ -30,7 +30,7 @@ A FancyZones-style window placement tool for Windows. Define rules that automati
 | **Tray icon → Show Dashboard** | Bring the dashboard back |
 | **Tray icon → Exit** | Quit completely |
 
-Closing the dashboard window minimizes it to the system tray — the watcher keeps running.
+Closing the dashboard window minimizes it to the system tray. The watcher keeps running.
 
 ### Adding a Rule
 
@@ -41,8 +41,8 @@ Click **➕** or right-click a row and choose **Edit**.
 | **Process Name** | The `.exe` filename of the target application (e.g. `chrome.exe`). Use **Browse** to pick an executable from disk — only the filename is extracted. |
 | **Width / Height** | The desired visible window size in pixels. Use the ▲▼ buttons to nudge values. Minimum is 100 px. |
 | **Monitor** | Which monitor to place the window on (1 = primary). |
-| **Horizontal Anchor** | `Left`, `Center`, or `Right` — where the window sits horizontally within the work area. |
-| **Vertical Anchor** | `Top`, `Center`, or `Bottom` — where the window sits vertically within the work area. |
+| **Horizontal Anchor** | `Left`, `Center`, or `Right` where the window sits horizontally within the work area. |
+| **Vertical Anchor** | `Top`, `Center`, or `Bottom` where the window sits vertically within the work area. |
 
 Click **Add** (or **Save** when editing) to apply immediately.
 
