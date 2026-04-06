@@ -38,7 +38,7 @@ Click **➕** or right-click a row and choose **Edit**.
 
 | Field | Description |
 |---|---|
-| **Process Name** | The `.exe` filename of the target application (e.g. `chrome.exe`). Use **Browse** to pick an executable from disk — only the filename is extracted. |
+| **Process Name** | The `.exe` filename of the target application (e.g. `chrome.exe`). Use **Browse** to pick an executable from disk. Only the filename is extracted. |
 | **Width / Height** | The desired visible window size in pixels. Use the ▲▼ buttons to nudge values. Minimum is 100 px. |
 | **Monitor** | Which monitor to place the window on (1 = primary). |
 | **Horizontal Anchor** | `Left`, `Center`, or `Right` where the window sits horizontally within the work area. |
