@@ -13,9 +13,10 @@ A FancyZones-style window placement tool for Windows. Define rules that automati
 - **Multi-monitor support**: target any monitor by number
 - **Apply once, move freely**: rules fire only on first appearance; you can move the window afterward without interference
 - **Dialog filtering**: only real application windows are touched; file pickers, property sheets, progress dialogs, and system overlays are left alone
-- **Persistent rules**: all rules are saved to a plain `.ini` file and reloaded on startup
+- **Elevated Window Support**: automatically requests administrative privileges to manage protected windows like Task Manager.
+- **Customizable Startup**: choose whether the dashboard opens on launch or starts minimized to the tray.
+- **Persistent rules**: all rules and preferences are saved to a plain `.ini` file and reloaded on startup
 - **Modern HTML table UI**: dark-themed dashboard rendered via an embedded WebBrowser control
-- **Minimize to tray**: closing the dashboard hides it; the watcher keeps running in the background
 
 ---
 
@@ -28,6 +29,7 @@ A FancyZones-style window placement tool for Windows. Define rules that automati
 | **➕ button** (top-right of header row) | Open the Add Rule form |
 | **Right-click a row** | Edit or Delete that rule |
 | **Tray icon → Show Dashboard** | Bring the dashboard back |
+|  **Tray icon → Show on Startup** | Toggle if the GUI opens on launch |
 | **Tray icon → Exit** | Quit completely |
 
 Closing the dashboard window minimizes it to the system tray. The watcher keeps running.
@@ -76,6 +78,14 @@ Monitor=1
 
 - There may be a brief moment (~500 ms) where a new window appears at its default position before being moved.
 - Rules target all windows of a given process. If an application opens multiple windows (e.g. File Explorer), each new window is positioned independently on first appearance.
+
+---
+
+## Administrative Privileges & UAC
+
+To manage "High Integrity" windows (like Task Manager, etc.), the script must run as an Administrator.
+- **Default Behavior**: The application will trigger a UAC prompt on launch to gain these rights.
+- **Silent Launch**: To skip the UAC prompt while maintaining admin rights, create a task in Windows Task Scheduler with "Run with highest privileges" enabled and launch the application via a shortcut to that task.
 
 ---
 
