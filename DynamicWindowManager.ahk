@@ -1,7 +1,7 @@
 ; =============================================================================
 ;  Dynamic Window Manager (DWM) — AutoHotkey v2
 ;  Modern HTML table UI via ActiveX WebBrowser, INI database backend
-;  Version : 3.1.0
+;  Version : 3.3.0
 ; =============================================================================
 
 #Requires AutoHotkey v2.0
@@ -11,18 +11,35 @@ Persistent
 ; ---------------------------------------------------------------------------
 ;  GLOBALS
 ; ---------------------------------------------------------------------------
-global DB_FILE   := A_ScriptDir "\DWM_Rules.ini"
-global APP_TITLE := "Dynamic Window Manager"
-global g_Rules   := Map()
-global g_Applied := Map()
-global g_WB      := ""
-global g_Doc     := ""
-global g_WBCtrl  := ""
+global DB_FILE       := A_ScriptDir "\DWM_Rules.ini"
+global APP_TITLE     := "Dynamic Window Manager"
+global g_Rules       := Map()
+global g_Applied     := Map()
+global g_WB          := ""
+global g_Doc         := ""
+global g_WBCtrl      := ""
+global g_ShowOnStart := true   ; default: show dashboard on launch
 
 ; ---------------------------------------------------------------------------
 ;  ENTRY POINT
 ; ---------------------------------------------------------------------------
+
+; Re-launch as administrator if not already elevated.
+; This is required to move/resize elevated windows (e.g. Task Manager)
+; when running as a compiled .exe. The .ahk interpreter is typically already
+; elevated, so this block only fires for compiled builds in practice.
+if !A_IsAdmin {
+    try {
+        if A_IsCompiled
+            Run '*RunAs "' A_ScriptFullPath '"'
+        else
+            Run '*RunAs "' A_AhkPath '" /restart "' A_ScriptFullPath '"'
+    }
+    ExitApp
+}
+
 DB_Load()
+Pref_Load()
 DWM_WriteHTML()
 DWM_BuildDashboard()
 DWM_StartWatcher()
@@ -62,8 +79,12 @@ DB_Load() {
 }
 
 DB_Save() {
+    ; Preserve the [Preferences] section before wiping the file.
+    showVal := IniRead(DB_FILE, "Preferences", "ShowOnStart", "1")
+
     if FileExist(DB_FILE)
         FileDelete DB_FILE
+
     idx := 1
     for key, rule in g_Rules {
         sec := "Rule" idx
@@ -75,6 +96,9 @@ DB_Save() {
         IniWrite rule["Monitor"],     DB_FILE, sec, "Monitor"
         idx++
     }
+
+    ; Re-write the preserved preference so it survives the rebuild.
+    IniWrite showVal, DB_FILE, "Preferences", "ShowOnStart"
 }
 
 DB_Upsert(proc, w, h, hAnchor, vAnchor, mon) {
@@ -103,6 +127,21 @@ _ClearApplied(proc) {
                 g_Applied.Delete(hwnd)
         }
     }
+}
+
+
+; ═══════════════════════════════════════════════════════════════════════════
+;  PREFERENCES  (stored in [Preferences] section of DWM_Rules.ini)
+; ═══════════════════════════════════════════════════════════════════════════
+
+Pref_Load() {
+    global g_ShowOnStart
+    raw := IniRead(DB_FILE, "Preferences", "ShowOnStart", "1")
+    g_ShowOnStart := (raw = "1")
+}
+
+Pref_Save() {
+    IniWrite (g_ShowOnStart ? "1" : "0"), DB_FILE, "Preferences", "ShowOnStart"
 }
 
 
@@ -474,11 +513,20 @@ DWM_Tick() {
             if !DWM_IsAppWindow(hwnd)
                 continue
 
-            minMax := WinGetMinMax("ahk_id " hwnd)
+            ; Skip windows we cannot interact with (e.g. elevated processes
+            ; when DWM is not running as admin). Mark them applied so we don't
+            ; keep retrying every tick — the window won't become accessible.
+            try {
+                minMax := WinGetMinMax("ahk_id " hwnd)
+            } catch {
+                g_Applied[hwnd] := 1
+                continue
+            }
+
             if (minMax = -1)   ; minimized — wait
                 continue
             if (minMax = 1) {  ; maximized — restore first
-                WinRestore "ahk_id " hwnd
+                try WinRestore "ahk_id " hwnd
                 Sleep 80
             }
 
@@ -487,7 +535,14 @@ DWM_Tick() {
                 rule["HAnchor"], rule["VAnchor"], rule["Monitor"],
                 &nx, &ny, &nw, &nh)
 
-            WinMove nx, ny, nw, nh, "ahk_id " hwnd
+            try {
+                WinMove nx, ny, nw, nh, "ahk_id " hwnd
+            } catch {
+                ; Window belongs to an elevated or protected process.
+                ; Mark as applied so we stop retrying.
+                g_Applied[hwnd] := 1
+                continue
+            }
             g_Applied[hwnd] := 1
         }
     }
@@ -535,7 +590,8 @@ DWM_BuildDashboard() {
     SetTimer DWM_PollWebClick, 150
 
     DWM_RefreshTable()
-    g_Dash.Show("w640 h340")
+    if g_ShowOnStart
+        g_Dash.Show("w640 h340")
 }
 
 DWM_RefreshTable() {
@@ -785,8 +841,26 @@ DWM_OpenForm(proc := "", w := "800", h := "600",
 A_TrayMenu.Delete()
 A_TrayMenu.Add("Show Dashboard", (*) => g_Dash.Show())
 A_TrayMenu.Add()
+A_TrayMenu.Add("Show on Startup", Tray_ToggleShowOnStart)
 A_TrayMenu.Add("Exit", (*) => ExitApp())
 A_TrayMenu.Default := "Show Dashboard"
+
+; Reflect the loaded preference in the checkmark immediately
+if g_ShowOnStart
+    A_TrayMenu.Check("Show on Startup")
+else
+    A_TrayMenu.Uncheck("Show on Startup")
+
+Tray_ToggleShowOnStart(*) {
+    global g_ShowOnStart
+    g_ShowOnStart := !g_ShowOnStart
+    if g_ShowOnStart
+        A_TrayMenu.Check("Show on Startup")
+    else
+        A_TrayMenu.Uncheck("Show on Startup")
+    Pref_Save()
+}
+
 A_IconTip := APP_TITLE
 if A_IsCompiled
     TraySetIcon(A_ScriptFullPath, 1)
