@@ -70,6 +70,9 @@ Height=720
 HAnchor=Left
 VAnchor=Top
 Monitor=1
+
+[Preferences]
+ShowOnStart=0
 ```
 
 ---
@@ -94,7 +97,7 @@ To manage "High Integrity" windows (like Task Manager, etc.), the script must ru
 ```
 Main Folder
 ├── DynamicWindowManager.exe   ← the application
-└── DWM_Rules.ini              ← auto-created on first rule save
+└── DWM_Rules.ini              ← stores rules and preferences
 ```
 
 Two temporary HTML files are written to `%TEMP%` on each launch for the dashboard UI. They are recreated automatically and can be ignored.
