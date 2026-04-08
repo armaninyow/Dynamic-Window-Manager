@@ -1,4 +1,6 @@
-# ↔️ Dynamic Window Manager
+![](https://github.com/armaninyow/Dynamic-Window-Manager/raw/refs/heads/main/icon.ico)
+
+# Dynamic Window Manager
 
 ![](https://raw.githubusercontent.com/armaninyow/Dynamic-Window-Manager/refs/heads/main/sample.png)
 
